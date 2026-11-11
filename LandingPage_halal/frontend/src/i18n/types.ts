@@ -40,10 +40,11 @@ export interface FaqItem {
 export interface Dictionary {
   meta: { title: string; description: string; ogAlt: string };
   a11y: { skipToContent: string; mainNav: string; languageSwitcher: string; opensNewTab: string };
-  nav: { how: string; verdicts: string; demo: string; openData: string; contribute: string; faq: string };
+  nav: { app: string; how: string; verdicts: string; demo: string; openData: string; contribute: string; faq: string };
   hero: {
     eyebrow: string;
     title: string;
+    titleAccent: string;
     subtitle: string;
     ctaSearch: string;
     ctaScan: string;
@@ -62,6 +63,36 @@ export interface Dictionary {
     results: string;
     minChars: string;
     seeAll: string;
+  };
+  screens: {
+    scanTitle: string;
+    scanHint: string;
+    scanning: string;
+    searchTitle: string;
+    searchQuery: string;
+    recent: string;
+    analysing: string;
+    analysingHint: string;
+    detailTitle: string;
+    historyTitle: string;
+    today: string;
+    contributeTitle: string;
+    contributeSteps: [string, string, string];
+    takePhoto: string;
+  };
+  gallery: {
+    eyebrow: string;
+    title: string;
+    lead: string;
+    captions: {
+      scan: string;
+      result: string;
+      detail: string;
+      search: string;
+      beauty: string;
+      history: string;
+      contribute: string;
+    };
   };
   projects: { eyebrow: string; title: string; lead: string; food: ProjectCopy; beauty: ProjectCopy };
   how: { eyebrow: string; title: string; lead: string; steps: [TextBlock, TextBlock, TextBlock] };

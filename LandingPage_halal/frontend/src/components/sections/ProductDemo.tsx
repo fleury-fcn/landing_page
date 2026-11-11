@@ -40,7 +40,7 @@ export function ProductDemo({ demo, labels: verdictLabels }: { demo: DemoCopy; l
   }
 
   return (
-    <section aria-labelledby="exemple-title" id="exemple" className="py-16 sm:py-24">
+    <section aria-labelledby="exemple-title" id="exemple" className="cv-auto py-16 sm:py-24">
       <Container>
         <SectionHeading id="exemple-title" eyebrow={demo.eyebrow} title={demo.title} lead={demo.lead} />
         <div className="mt-10">

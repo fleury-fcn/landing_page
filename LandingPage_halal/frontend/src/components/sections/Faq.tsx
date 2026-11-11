@@ -6,7 +6,7 @@ import type { Dictionary } from "@/i18n/types";
 /** <details>/<summary> natifs : accessibles au clavier et aux lecteurs d'écran sans JS. */
 export function Faq({ dict }: { dict: Dictionary }) {
   return (
-    <section aria-labelledby="faq-title" id="faq" className="py-16 sm:py-24">
+    <section aria-labelledby="faq-title" id="faq" className="cv-auto py-16 sm:py-24">
       <Container className="max-w-3xl">
         <SectionHeading id="faq-title" eyebrow={dict.faq.eyebrow} title={dict.faq.title} align="center" />
         <div className="mt-10 divide-y divide-line rounded-card bg-surface ring-1 ring-line">

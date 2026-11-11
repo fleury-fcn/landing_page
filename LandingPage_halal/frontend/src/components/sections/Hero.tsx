@@ -1,53 +1,98 @@
+import type { CSSProperties } from "react";
+import { Phone } from "@/components/phone/Phone";
+import { DetailScreen, FloatingChip, ResultScreen, ScannerScreen, type ScreenCopy } from "@/components/phone/screens";
+import { ButtonLink } from "@/components/ui/ButtonLink";
 import { Container } from "@/components/ui/Container";
 import { Icon } from "@/components/ui/Icon";
-import { ButtonLink } from "@/components/ui/ButtonLink";
+import { VerdictBadge } from "@/components/ui/VerdictBadge";
 import type { Dictionary } from "@/i18n/types";
 import { projectLinks } from "@/lib/site";
 import { HeroSearch } from "./HeroSearch";
-import { PhoneMockup } from "./PhoneMockup";
+
+const d = (n: number) => ({ "--d": n }) as CSSProperties;
 
 export function Hero({ dict }: { dict: Dictionary }) {
+  const copy: ScreenCopy = { s: dict.screens, demo: dict.demo, labels: dict.verdicts.labels };
+  const L = dict.verdicts.labels;
   return (
-    <section aria-labelledby="hero-title" className="relative overflow-hidden">
-      <div
-        aria-hidden="true"
-        className="absolute inset-x-0 top-0 -z-10 h-[38rem] bg-[radial-gradient(60%_50%_at_15%_0%,var(--food-soft),transparent),radial-gradient(45%_45%_at_95%_20%,var(--beauty-soft),transparent)]"
-      />
-      <Container className="grid items-center gap-12 py-14 sm:py-20 lg:grid-cols-[1.15fr_0.85fr] lg:py-24">
+    <section aria-labelledby="hero-title" className="relative isolate overflow-hidden">
+      {/* fonds animés */}
+      <div aria-hidden="true" className="absolute inset-0 -z-10 overflow-hidden">
+        <div className="blob absolute -top-40 -start-32 size-[34rem] rounded-full bg-[radial-gradient(closest-side,var(--brand-soft),transparent)]" />
+        <div className="blob absolute top-24 -end-40 size-[30rem] rounded-full bg-[radial-gradient(closest-side,color-mix(in_oklab,var(--brand-glow)_30%,transparent),transparent)]" style={{ animationDelay: "-6s" }} />
+        <div className="blob absolute -bottom-40 start-1/3 size-[26rem] rounded-full bg-[radial-gradient(closest-side,var(--beauty-soft),transparent)]" style={{ animationDelay: "-12s" }} />
+        <div className="absolute inset-0 bg-[radial-gradient(var(--line)_1px,transparent_1px)] [background-size:22px_22px] opacity-50 [mask-image:linear-gradient(to_bottom,black,transparent_75%)]" />
+      </div>
+
+      <Container className="grid items-center gap-10 py-12 sm:py-16 lg:grid-cols-[1.05fr_0.95fr] lg:py-20">
         <div>
-          <p className="mb-4 inline-flex items-center gap-2 rounded-full bg-surface px-3 py-1 text-sm font-medium text-muted ring-1 ring-line">
-            <Icon name="leaf" className="size-4 text-food" />
+          <p className="intro mb-4 inline-flex items-center gap-2 rounded-full bg-surface/80 px-3 py-1 text-sm font-medium text-muted ring-1 ring-line backdrop-blur" style={d(0)}>
+            <span className="relative flex size-2">
+              <span className="ping absolute inline-flex size-full rounded-full bg-brand opacity-60" />
+              <span className="relative inline-flex size-2 rounded-full bg-brand" />
+            </span>
             {dict.hero.eyebrow}
           </p>
-          <h1 id="hero-title" className="text-4xl font-extrabold sm:text-5xl lg:text-6xl">
-            {dict.hero.title}
+          <h1 id="hero-title" className="intro text-4xl font-extrabold sm:text-5xl lg:text-6xl" style={d(1)}>
+            {dict.hero.title} <span className="text-gradient">{dict.hero.titleAccent}</span>
           </h1>
-          <p className="mt-5 max-w-xl text-lg text-muted">{dict.hero.subtitle}</p>
+          <p className="intro mt-5 max-w-xl text-lg text-muted" style={d(2)}>
+            {dict.hero.subtitle}
+          </p>
 
-          <HeroSearch
-            copy={dict.search}
-            cta={dict.hero.ctaSearch}
-            addLabel={dict.contribute.add.cta}
-            projectNames={{ food: dict.projects.food.tag, beauty: dict.projects.beauty.tag }}
-            labels={dict.verdicts.labels}
-          />
+          <div className="intro" style={d(3)}>
+            <HeroSearch
+              copy={dict.search}
+              cta={dict.hero.ctaSearch}
+              addLabel={dict.contribute.add.cta}
+              projectNames={{ food: dict.projects.food.tag, beauty: dict.projects.beauty.tag }}
+              labels={dict.verdicts.labels}
+            />
+          </div>
 
-          <div className="mt-4 flex flex-wrap items-center gap-3">
+          <div className="intro mt-1 flex flex-wrap items-center gap-3" style={d(4)}>
             <ButtonLink href={projectLinks.scan("food")} variant="secondary" icon="scan">
               {dict.hero.ctaScan}
             </ButtonLink>
           </div>
 
           <ul className="mt-8 flex flex-col gap-2 text-sm text-muted sm:flex-row sm:flex-wrap sm:gap-x-6">
-            {dict.hero.trust.map((item) => (
-              <li key={item} className="flex items-center gap-2">
-                <Icon name="check" className="size-4 text-halal" strokeWidth={3} />
+            {dict.hero.trust.map((item, i) => (
+              <li key={item} className="intro flex items-center gap-2" style={d(5 + i)}>
+                <span className="grid size-5 place-items-center rounded-full bg-brand-soft text-brand">
+                  <Icon name="check" className="size-3" strokeWidth={3} />
+                </span>
                 {item}
               </li>
             ))}
           </ul>
         </div>
-        <PhoneMockup dict={dict} />
+
+        {/* Grappe de téléphones */}
+        <div className="relative mx-auto flex h-[33rem] w-full max-w-[34rem] items-center justify-center sm:h-[36rem]">
+          <Phone size="sm" tilt={-9} float delay={1} dark className="absolute start-0 top-14 hidden opacity-95 sm:block">
+            <ScannerScreen {...copy} />
+          </Phone>
+          <Phone size="sm" tilt={9} float delay={2} className="absolute end-0 top-24 hidden opacity-95 sm:block">
+            <DetailScreen {...copy} />
+          </Phone>
+          <Phone size="md" float label={dict.hero.mockupLabel} className="relative z-10">
+            <ResultScreen {...copy} />
+          </Phone>
+
+          <FloatingChip className="start-0 top-6 sm:-start-4" delay={1}>
+            <VerdictBadge verdict="haram" label={L.haram} size="sm" />
+            <span dir="ltr">{dict.demo.food.ingredients[1]?.name}</span>
+          </FloatingChip>
+          <FloatingChip className="end-0 top-1/2 sm:-end-2" delay={3}>
+            <VerdictBadge verdict="doubtful" label={L.doubtful} size="sm" />
+            <span dir="ltr">E120</span>
+          </FloatingChip>
+          <FloatingChip className="start-2 bottom-10 sm:start-6" delay={5}>
+            <VerdictBadge verdict="halal" label={L.halal} size="sm" />
+            <span dir="ltr">E330</span>
+          </FloatingChip>
+        </div>
       </Container>
     </section>
   );

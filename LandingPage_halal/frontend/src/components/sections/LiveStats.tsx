@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
+import { CountUp } from "@/components/ui/CountUp";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import { VerdictBadge } from "@/components/ui/VerdictBadge";
 import type { Locale } from "@/i18n/config";
@@ -47,7 +48,6 @@ export function LiveStats({
   }, []);
 
   const nf = new Intl.NumberFormat(locale);
-  const show = (n: number | null) => (n === null ? "—" : nf.format(n));
   const items: { icon: IconName; label: string; value: number | null }[] = [
     { icon: "box", label: copy.products, value: stats.products.total },
     { icon: "flask", label: copy.ingredients, value: stats.ingredients },
@@ -59,12 +59,21 @@ export function LiveStats({
   return (
     <>
       <dl className="mt-10 grid gap-4 sm:grid-cols-3" aria-busy={status === "loading"}>
-        {items.map((it) => (
-          <div key={it.label} className="reveal flex flex-col-reverse rounded-card bg-surface p-6 ring-1 ring-line">
-            <dt className="mt-1 text-muted">{it.label}</dt>
+        {items.map((it, i) => (
+          <div
+            key={it.label}
+            style={{ "--i": i } as CSSProperties}
+            className="reveal lift relative flex flex-col-reverse overflow-hidden rounded-card bg-surface p-6 ring-1 ring-line hover:shadow-xl hover:shadow-brand-strong/10"
+          >
+            <span aria-hidden="true" className="absolute -end-8 -top-8 size-28 rounded-full bg-brand-soft" />
+            <dt className="relative mt-2 text-muted">{it.label}</dt>
             <dd className="flex items-center gap-3 text-4xl font-extrabold tabular-nums">
-              <Icon name={it.icon} className="size-7 shrink-0 text-food" />
-              <span className={status === "loading" ? "opacity-60 transition-opacity" : "transition-opacity"}>{show(it.value)}</span>
+              <span className="relative grid size-12 shrink-0 place-items-center rounded-2xl bg-brand text-on-brand">
+                <Icon name={it.icon} className="size-6" />
+              </span>
+              <span className={`relative ${status === "loading" ? "opacity-60 transition-opacity" : "transition-opacity"}`}>
+                {it.value === null ? "—" : <CountUp value={it.value} format={(n) => nf.format(n)} />}
+              </span>
             </dd>
           </div>
         ))}
@@ -82,7 +91,7 @@ export function LiveStats({
               <li key={p.barcode} className={`accent-${p.project}`}>
                 <a
                   href={projectLinks.product(p.project, p.barcode)}
-                  className="flex h-full flex-col gap-3 rounded-2xl bg-surface p-4 ring-1 ring-line transition-shadow hover:shadow-lg hover:shadow-ink/5"
+                  className="lift flex h-full flex-col gap-3 rounded-2xl bg-surface p-4 ring-1 ring-line hover:shadow-lg hover:shadow-brand-strong/10"
                 >
                   <span className="font-semibold">{p.name}</span>
                   <span className="text-sm text-muted">{p.brand}</span>

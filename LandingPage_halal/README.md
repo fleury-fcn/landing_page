@@ -64,6 +64,9 @@ CORS : seules les origines listées dans `CORS_ALLOWED_ORIGINS` sont autorisées
 - **Zéro dépendance UI** : icônes SVG maison, scroll reveal en CSS (`animation-timeline: view()`, désactivé si `prefers-reduced-motion`), maquette d'app en HTML/CSS (aucune image à charger).
 - **Verdicts** : couleur + icône + libellé, jamais la couleur seule. Le statut global est le plus prudent des ingrédients (la même règle côté front `lib/verdict.ts` et côté back `catalog/models.py`).
 - **i18n** : dictionnaires typés (`src/i18n/types.ts`), un test vérifie que les trois langues ont la même structure. RTL via `dir="rtl"` et propriétés logiques (`ms-`, `ps-`, `start-`…).
+- **Thème vert** : la couleur de marque est le vert (`--brand` dans `globals.css`). Les accents Food (vert) et Beauty (prune) restent distincts.
+- **Téléphones** : `components/phone/` contient un cadre CSS (`Phone`) et 7 écrans d'app (scanner, analyse, résultat, détail, recherche, historique, contribution), réutilisés dans le hero, les étapes, les projets, la galerie et la section contribuer. Ils ne chargent aucune image et sont traduits automatiquement.
+- **Animations** : apparition du hero en cascade, téléphones flottants, laser du scanner, pastilles qui apparaissent, fonds animés, galerie défilante (pause au survol), compteurs animés et apparition au scroll (CSS natif, avec un fallback IntersectionObserver). Tout est coupé si `prefers-reduced-motion: reduce`.
 - **Dark mode** : automatique via `prefers-color-scheme`. Tous les couples de couleurs respectent WCAG AA.
 
 ## Déploiement (points d'attention)

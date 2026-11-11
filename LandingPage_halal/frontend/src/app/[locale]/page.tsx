@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SkipLink } from "@/components/layout/SkipLink";
+import { RevealObserver } from "@/components/layout/RevealObserver";
+import { AppGallery } from "@/components/sections/AppGallery";
 import { Contribute } from "@/components/sections/Contribute";
 import { Faq } from "@/components/sections/Faq";
 import { Hero } from "@/components/sections/Hero";
@@ -28,6 +30,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         <Hero dict={dict} />
         <ProjectSelector dict={dict} />
         <HowItWorks dict={dict} />
+        <AppGallery dict={dict} />
         <VerdictSystem dict={dict} />
         <ProductDemo demo={dict.demo} labels={dict.verdicts.labels} />
         <OpenData dict={dict} />
@@ -36,6 +39,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         <Faq dict={dict} />
       </main>
       <SiteFooter locale={locale} dict={dict} />
+      <RevealObserver />
     </>
   );
 }

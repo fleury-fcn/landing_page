@@ -1,23 +1,30 @@
 @import "tailwindcss";
 
-/* ───────────── Design tokens ─────────────
-   Les accents Food / Beauty sont volontairement hors des teintes de verdict
-   (vert / ambre / rouge / gris) pour ne jamais être confondus avec un statut.
+/* ───────────── Design tokens : thème vert ─────────────
+   Le vert est la couleur de marque. Les verdicts restent lisibles sans la couleur
+   (icône + libellé), donc la proximité marque / « halal » ne crée pas d'ambiguïté.
    Tous les couples texte/fond respectent WCAG AA (≥ 4,5:1). */
 :root {
   color-scheme: light;
-  --bg: #fbfaf6;
+  --bg: #f4faf6;
   --surface: #ffffff;
-  --surface-2: #f2f0e8;
-  --ink: #17201b;
-  --muted: #4d5751;
-  --line: #e2dfd4;
-  --food: #0b6a80;
-  --food-soft: #e3f2f5;
+  --surface-2: #e4f1e8;
+  --ink: #0f2419;
+  --muted: #43584b;
+  --line: #d3e5d9;
+
+  --brand: #0a6b3d;
+  --brand-strong: #07502d;
+  --brand-soft: #d9f0e1;
+  --on-brand: #ffffff;
+  --brand-glow: #34c77b;
+
+  --food: var(--brand);
+  --food-soft: var(--brand-soft);
   --beauty: #8a2f6c;
   --beauty-soft: #f7e8f1;
-  --accent: var(--ink);
-  --accent-soft: var(--surface-2);
+  --accent: var(--brand);
+  --accent-soft: var(--brand-soft);
 
   --halal: #166534;
   --halal-bg: #dcfce7;
@@ -28,20 +35,26 @@
   --unknown: #374151;
   --unknown-bg: #e5e7eb;
 
-  --focus: #0b6a80;
+  --phone: #0f2419;
+  --focus: #0a6b3d;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     color-scheme: dark;
-    --bg: #0e1311;
-    --surface: #161d1a;
-    --surface-2: #1d2622;
-    --ink: #eef2ef;
-    --muted: #a7b2ac;
-    --line: #2b3530;
-    --food: #5fc6dd;
-    --food-soft: #12292f;
+    --bg: #0a140e;
+    --surface: #112018;
+    --surface-2: #17291f;
+    --ink: #e8f5ed;
+    --muted: #9fb9a9;
+    --line: #23392c;
+
+    --brand: #4ed08a;
+    --brand-strong: #07502d;
+    --brand-soft: #123222;
+    --on-brand: #05210f;
+    --brand-glow: #2fa866;
+
     --beauty: #ec9fd2;
     --beauty-soft: #2e1a27;
 
@@ -54,7 +67,8 @@
     --unknown: #d1d5db;
     --unknown-bg: #2a2f36;
 
-    --focus: #5fc6dd;
+    --phone: #020604;
+    --focus: #4ed08a;
   }
 }
 
@@ -74,6 +88,11 @@
   --color-ink: var(--ink);
   --color-muted: var(--muted);
   --color-line: var(--line);
+  --color-brand: var(--brand);
+  --color-brand-strong: var(--brand-strong);
+  --color-brand-soft: var(--brand-soft);
+  --color-on-brand: var(--on-brand);
+  --color-brand-glow: var(--brand-glow);
   --color-food: var(--food);
   --color-food-soft: var(--food-soft);
   --color-beauty: var(--beauty);
@@ -88,6 +107,7 @@
   --color-haram-bg: var(--haram-bg);
   --color-unknown: var(--unknown);
   --color-unknown-bg: var(--unknown-bg);
+  --color-phone: var(--phone);
 
   --font-sans: var(--font-jakarta), var(--font-arabic), ui-sans-serif, system-ui, sans-serif;
   --radius-card: 1.25rem;
@@ -96,7 +116,7 @@
 /* ───────────── Base ───────────── */
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 5rem;
+  scroll-padding-top: 7rem;
   -webkit-text-size-adjust: 100%;
 }
 body {
@@ -105,6 +125,7 @@ body {
   font-family: var(--font-sans);
   line-height: 1.6;
   text-rendering: optimizeLegibility;
+  overflow-x: clip;
 }
 :where(h1, h2, h3) {
   line-height: 1.15;
@@ -118,44 +139,181 @@ body {
 p {
   text-wrap: pretty;
 }
-
 :focus-visible {
   outline: 3px solid var(--focus);
   outline-offset: 3px;
   border-radius: 6px;
 }
 
-/* ───────────── Scroll reveal (0 JS) ─────────────
-   Amélioration progressive : uniquement si le navigateur supporte les
-   scroll-driven animations ET que l'utilisateur n'a pas réduit les animations. */
-@media (prefers-reduced-motion: no-preference) {
-  @supports (animation-timeline: view()) {
-    .reveal {
-      animation: reveal linear both;
-      animation-timeline: view();
-      animation-range: entry 0% entry 35%;
-    }
-  }
+/* Rendu différé des sections hors écran (gros gain de style/layout) */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
 }
-@keyframes reveal {
-  from {
-    opacity: 0;
-    transform: translateY(1.25rem);
+
+/* Texte en dégradé vert pour les mots clés des titres */
+.text-gradient {
+  background: linear-gradient(100deg, var(--brand) 10%, var(--brand-glow) 90%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ═════════════ Animations ═════════════
+   Toutes les animations sont conditionnées à prefers-reduced-motion: no-preference.
+   Sinon, le contenu est affiché immédiatement, sans mouvement. */
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(1.5rem); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes pop {
+  0% { opacity: 0; transform: scale(0.6); }
+  70% { opacity: 1; transform: scale(1.08); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(var(--tilt, 0deg)); }
+  50% { transform: translateY(-14px) rotate(var(--tilt, 0deg)); }
+}
+@keyframes scanline {
+  0%, 100% { top: 18%; }
+  50% { top: 78%; }
+}
+@keyframes blob {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(6%, -4%) scale(1.08); }
+  66% { transform: translate(-5%, 5%) scale(0.95); }
+}
+@keyframes marquee {
+  to { transform: translateX(calc(-50% - var(--gap, 1.5rem) / 2)); }
+}
+@keyframes marquee-rtl {
+  to { transform: translateX(calc(50% + var(--gap, 1.5rem) / 2)); }
+}
+@keyframes fill {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+@keyframes ping {
+  75%, 100% { transform: scale(2.2); opacity: 0; }
+}
+@keyframes shimmer {
+  to { background-position: -200% 0; }
+}
+@keyframes tap {
+  0%, 60%, 100% { transform: scale(1); }
+  70% { transform: scale(0.94); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Apparition au chargement, avec décalage via --d (ex. style={{"--d": 2}}) */
+  .intro {
+    animation: fade-up 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation-delay: calc(var(--d, 0) * 110ms);
   }
-  to {
+  .pop {
+    animation: pop 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation-delay: calc(var(--d, 0) * 150ms + 600ms);
+  }
+  .float {
+    animation: float 6s ease-in-out infinite;
+    animation-delay: calc(var(--d, 0) * -1.7s);
+  }
+  .scanline {
+    animation: scanline 2.4s ease-in-out infinite;
+  }
+  .blob {
+    animation: blob 18s ease-in-out infinite;
+  }
+  .bar-fill {
+    transform-origin: left;
+    animation: fill 1.6s cubic-bezier(0.2, 0.7, 0.2, 1) both infinite alternate;
+    animation-delay: calc(var(--d, 0) * 250ms);
+  }
+  [dir="rtl"] .bar-fill {
+    transform-origin: right;
+  }
+  .ping {
+    animation: ping 1.6s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+  .shimmer {
+    background: linear-gradient(90deg, transparent 25%, color-mix(in oklab, var(--surface) 70%, transparent) 50%, transparent 75%) 0 0 / 200% 100%;
+    animation: shimmer 2.2s linear infinite;
+  }
+  .tap {
+    animation: tap 3s ease-in-out infinite;
+  }
+  .marquee-track {
+    animation: marquee 50s linear infinite;
+  }
+  [dir="rtl"] .marquee-track {
+    animation-name: marquee-rtl;
+  }
+  .marquee:hover .marquee-track,
+  .marquee:focus-within .marquee-track {
+    animation-play-state: paused;
+  }
+  .lift {
+    transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.35s;
+  }
+  .lift:hover {
+    transform: translateY(-6px);
+  }
+
+  /* Scroll reveal natif (Chrome/Edge, Safari 26+) */
+  @supports (animation-timeline: view()) {
+    .reveal,
+    .reveal-left,
+    .reveal-right,
+    .reveal-zoom {
+      animation: fade-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 40%;
+    }
+    .reveal-left { animation-name: from-left; }
+    .reveal-right { animation-name: from-right; }
+    .reveal-zoom { animation-name: zoom-in; }
+  }
+
+  /* Fallback IntersectionObserver (Firefox…) : classe posée par <RevealObserver /> */
+  .js-reveal :is(.reveal, .reveal-left, .reveal-right, .reveal-zoom) {
+    opacity: 0;
+    transform: translateY(1.5rem);
+    transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+    transition-delay: calc(var(--i, 0) * 90ms);
+  }
+  .js-reveal .reveal-left { transform: translateX(-2.5rem); }
+  .js-reveal .reveal-right { transform: translateX(2.5rem); }
+  .js-reveal .reveal-zoom { transform: scale(0.9); }
+  .js-reveal :is(.reveal, .reveal-left, .reveal-right, .reveal-zoom).is-visible {
     opacity: 1;
     transform: none;
   }
 }
 
+@keyframes from-left {
+  from { opacity: 0; transform: translateX(-2.5rem); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes from-right {
+  from { opacity: 0; transform: translateX(2.5rem); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes zoom-in {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: none; }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  *,
-  *::before,
-  *::after {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
 }

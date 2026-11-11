@@ -14,7 +14,7 @@ export function LanguageSwitcher({ current, label, path = "" }: { current: Local
                 lang={locale}
                 aria-current={active ? "page" : undefined}
                 className={`inline-flex min-h-9 min-w-9 items-center justify-center rounded-full px-2.5 font-medium transition-colors ${
-                  active ? "bg-ink text-bg" : "text-muted hover:bg-surface-2 hover:text-ink"
+                  active ? "bg-brand text-on-brand" : "text-muted hover:bg-surface-2 hover:text-ink"
                 }`}
               >
                 <span aria-hidden="true">{locale.toUpperCase()}</span>

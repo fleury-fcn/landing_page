@@ -105,7 +105,7 @@ export function HeroSearch({
       <label htmlFor={`${id}-q`} className="mb-2 block text-sm font-semibold">
         {copy.inputLabel}
       </label>
-      <div className="flex flex-col gap-2 rounded-3xl bg-surface p-2 shadow-lg ring-1 shadow-ink/5 ring-line focus-within:ring-2 focus-within:ring-(--focus) sm:flex-row sm:rounded-full">
+      <div className="flex flex-col gap-2 rounded-3xl bg-surface p-2 shadow-xl ring-1 shadow-brand-strong/10 ring-line focus-within:ring-2 focus-within:ring-(--focus) sm:flex-row sm:rounded-full">
         <div className="flex flex-1 items-center gap-2 ps-3">
           <Icon name="search" className="size-5 shrink-0 text-muted" />
           <input
@@ -124,7 +124,7 @@ export function HeroSearch({
         <button
           type="submit"
           aria-disabled={state.kind === "loading" || undefined}
-          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-ink px-6 font-semibold text-bg hover:bg-ink/85"
+          className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-brand px-6 font-semibold text-on-brand shadow-lg shadow-brand/25 transition-all hover:bg-brand/90 active:scale-[0.97]"
         >
           {cta}
         </button>

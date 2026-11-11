@@ -7,6 +7,7 @@ import { Logo } from "./Logo";
 export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const links = [
     { href: `/${locale}/#fonctionnement`, label: dict.nav.how },
+    { href: `/${locale}/#galerie`, label: dict.nav.app },
     { href: `/${locale}/#verdicts`, label: dict.nav.verdicts },
     { href: `/${locale}/#exemple`, label: dict.nav.demo },
     { href: `/${locale}/#open-data`, label: dict.nav.openData },

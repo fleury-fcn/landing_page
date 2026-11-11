@@ -23,7 +23,7 @@ describe("LiveStats", () => {
     );
     render(<LiveStats {...props} />);
     expect(await screen.findByText(/Données en direct/)).toBeInTheDocument();
-    expect(screen.getByText((text) => text.replace(/\s/g, "") === "1234")).toBeInTheDocument();
+    expect(screen.getAllByText((text) => text.replace(/\s/g, "") === "1234").length).toBeGreaterThan(0);
   });
 
   it("bascule sur le repli statique si l'API échoue", async () => {

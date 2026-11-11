@@ -28,12 +28,12 @@ export default function OpengraphImage() {
           flexDirection: "column",
           justifyContent: "space-between",
           padding: 72,
-          background: "linear-gradient(135deg, #e3f2f5 0%, #fbfaf6 50%, #f7e8f1 100%)",
-          color: "#17201b",
+          background: "linear-gradient(135deg, #07502d 0%, #0a6b3d 55%, #34c77b 100%)",
+          color: "#ffffff",
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 20, fontSize: 40, fontWeight: 700 }}>
-          <div style={{ width: 64, height: 64, borderRadius: 18, background: "#17201b", display: "flex" }} />
+          <div style={{ width: 64, height: 64, borderRadius: 18, background: "#ffffff", display: "flex" }} />
           Halal Open Facts
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>

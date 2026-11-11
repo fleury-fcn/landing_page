@@ -1,3 +1,5 @@
+import { Phone } from "@/components/phone/Phone";
+import { ResultScreen } from "@/components/phone/screens";
 import { Container } from "@/components/ui/Container";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -7,16 +9,18 @@ import { projectKeys, projectLinks, site, type ProjectKey } from "@/lib/site";
 const icons: Record<ProjectKey, IconName> = { food: "leaf", beauty: "sparkle" };
 
 export function ProjectSelector({ dict }: { dict: Dictionary }) {
+  const { screens, demo } = dict;
+  const labels = dict.verdicts.labels;
   return (
-    <section aria-labelledby="projets-title" id="projets" className="py-16 sm:py-24">
+    <section aria-labelledby="projets-title" id="projets" className="cv-auto py-16 sm:py-24">
       <Container>
         <SectionHeading id="projets-title" eyebrow={dict.projects.eyebrow} title={dict.projects.title} lead={dict.projects.lead} />
         <ul className="mt-10 grid gap-5 md:grid-cols-2">
-          {projectKeys.map((key) => {
+          {projectKeys.map((key, idx) => {
             const p = dict.projects[key];
             return (
-              <li key={key} className={`accent-${key} reveal`}>
-                <article className="group relative flex h-full flex-col overflow-hidden rounded-card bg-surface p-6 ring-1 ring-line transition-shadow focus-within:ring-2 focus-within:ring-accent hover:shadow-xl hover:shadow-ink/5 sm:p-8">
+              <li key={key} className={`accent-${key} ${idx === 0 ? "reveal-left" : "reveal-right"}`}>
+                <article className="lift group relative flex h-full flex-col overflow-hidden rounded-card bg-surface p-6 ring-1 ring-line focus-within:ring-2 focus-within:ring-accent hover:shadow-2xl hover:shadow-brand-strong/10 sm:p-8 sm:pe-52 lg:pe-56">
                   <div aria-hidden="true" className="absolute inset-x-0 top-0 h-1.5 bg-accent" />
                   <div className="flex items-center gap-3">
                     <span className="grid size-12 place-items-center rounded-2xl bg-accent-soft text-accent">
@@ -37,6 +41,15 @@ export function ProjectSelector({ dict }: { dict: Dictionary }) {
                       </li>
                     ))}
                   </ul>
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute -end-6 -bottom-40 hidden transition-transform duration-500 group-hover:-translate-y-6 sm:block"
+                  >
+                    <div className="absolute inset-0 -z-10 rounded-full bg-accent-soft blur-2xl" />
+                    <Phone size="sm" tilt={-6}>
+                      <ResultScreen s={screens} demo={demo} labels={labels} kind={key} />
+                    </Phone>
+                  </div>
                   <a
                     href={projectLinks.home(key)}
                     className="mt-8 inline-flex items-center gap-2 font-semibold text-accent after:absolute after:inset-0 after:content-['']"
