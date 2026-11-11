@@ -43,6 +43,7 @@ export const ar: Dictionary = {
     error: "البحث غير متاح مؤقتًا. حاول مجددًا بعد قليل.",
     results: "{n} نتيجة لـ «{q}»",
     minChars: "اكتب حرفين على الأقل.",
+    seeAll: "عرض كل النتائج",
   },
   projects: {
     eyebrow: "مشروعان توأمان",

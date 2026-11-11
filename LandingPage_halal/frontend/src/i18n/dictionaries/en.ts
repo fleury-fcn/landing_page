@@ -42,6 +42,7 @@ export const en: Dictionary = {
     error: "Search is temporarily unavailable. Please try again shortly.",
     results: "{n} result(s) for “{q}”",
     minChars: "Type at least 2 characters.",
+    seeAll: "See all results",
   },
   projects: {
     eyebrow: "Two sister projects",

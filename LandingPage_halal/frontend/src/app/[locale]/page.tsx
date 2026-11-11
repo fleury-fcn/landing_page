@@ -23,11 +23,11 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <SkipLink label={dict.a11y.skipToContent} />
       <SiteHeader locale={locale} dict={dict} />
       <main id="contenu" tabIndex={-1} className="outline-none">
-        <Hero dict={dict} locale={locale} />
+        <Hero dict={dict} />
         <ProjectSelector dict={dict} />
         <HowItWorks dict={dict} />
         <VerdictSystem dict={dict} />
-        <ProductDemo dict={dict} />
+        <ProductDemo demo={dict.demo} labels={dict.verdicts.labels} />
         <OpenData dict={dict} />
         <Stats dict={dict} locale={locale} />
         <Contribute dict={dict} />

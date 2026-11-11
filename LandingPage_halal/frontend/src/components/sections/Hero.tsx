@@ -1,13 +1,12 @@
 import { Container } from "@/components/ui/Container";
 import { Icon } from "@/components/ui/Icon";
 import { ButtonLink } from "@/components/ui/ButtonLink";
-import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/types";
 import { projectLinks } from "@/lib/site";
 import { HeroSearch } from "./HeroSearch";
 import { PhoneMockup } from "./PhoneMockup";
 
-export function Hero({ dict, locale }: { dict: Dictionary; locale: Locale }) {
+export function Hero({ dict }: { dict: Dictionary }) {
   return (
     <section aria-labelledby="hero-title" className="relative overflow-hidden">
       <div
@@ -25,7 +24,13 @@ export function Hero({ dict, locale }: { dict: Dictionary; locale: Locale }) {
           </h1>
           <p className="mt-5 max-w-xl text-lg text-muted">{dict.hero.subtitle}</p>
 
-          <HeroSearch dict={dict} locale={locale} />
+          <HeroSearch
+            copy={dict.search}
+            cta={dict.hero.ctaSearch}
+            addLabel={dict.contribute.add.cta}
+            projectNames={{ food: dict.projects.food.tag, beauty: dict.projects.beauty.tag }}
+            labels={dict.verdicts.labels}
+          />
 
           <div className="mt-4 flex flex-wrap items-center gap-3">
             <ButtonLink href={projectLinks.scan("food")} variant="secondary" icon="scan">

@@ -61,6 +61,7 @@ export interface Dictionary {
     error: string;
     results: string;
     minChars: string;
+    seeAll: string;
   };
   projects: { eyebrow: string; title: string; lead: string; food: ProjectCopy; beauty: ProjectCopy };
   how: { eyebrow: string; title: string; lead: string; steps: [TextBlock, TextBlock, TextBlock] };

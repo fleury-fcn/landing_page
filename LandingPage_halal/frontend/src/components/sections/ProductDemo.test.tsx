@@ -6,14 +6,14 @@ import { ProductDemo } from "./ProductDemo";
 
 describe("ProductDemo", () => {
   it("affiche le statut global le plus prudent (haram pour l'exemple aliment)", () => {
-    render(<ProductDemo dict={fr} />);
+    render(<ProductDemo demo={fr.demo} labels={fr.verdicts.labels} />);
     const panel = screen.getByRole("tabpanel");
     expect(panel.querySelector('[data-verdict="haram"]')).toHaveTextContent("Haram");
   });
 
   it("navigue entre les onglets au clavier", async () => {
     const user = userEvent.setup();
-    render(<ProductDemo dict={fr} />);
+    render(<ProductDemo demo={fr.demo} labels={fr.verdicts.labels} />);
     const food = screen.getByRole("tab", { name: "Aliment" });
     await user.click(food);
     await user.keyboard("{ArrowRight}");
@@ -24,7 +24,7 @@ describe("ProductDemo", () => {
   });
 
   it("affiche la source et les divergences d'un ingrédient", () => {
-    render(<ProductDemo dict={fr} />);
+    render(<ProductDemo demo={fr.demo} labels={fr.verdicts.labels} />);
     expect(screen.getAllByText(/Al-Baqara/).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/malikite/).length).toBeGreaterThan(0);
   });

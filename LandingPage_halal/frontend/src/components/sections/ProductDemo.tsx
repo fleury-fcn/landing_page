@@ -7,15 +7,18 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { VerdictBadge } from "@/components/ui/VerdictBadge";
 import { format } from "@/i18n/get-dictionary";
 import type { DemoProduct, Dictionary } from "@/i18n/types";
+import { overallVerdict, type Verdict } from "@/lib/verdict";
 import { projectKeys, type ProjectKey } from "@/lib/site";
-import { overallVerdict } from "@/lib/verdict";
+
+type DemoCopy = Dictionary["demo"];
+type Labels = Record<Verdict, string>;
 
 /** Onglets WAI-ARIA (activation automatique, flèches + Début/Fin, sens RTL respecté). */
-export function ProductDemo({ dict }: { dict: Dictionary }) {
+export function ProductDemo({ demo, labels: verdictLabels }: { demo: DemoCopy; labels: Labels }) {
   const [active, setActive] = useState<ProjectKey>("food");
   const tabs = useRef<Record<ProjectKey, HTMLButtonElement | null>>({ food: null, beauty: null });
   const baseId = useId();
-  const labels: Record<ProjectKey, string> = { food: dict.demo.tabFood, beauty: dict.demo.tabBeauty };
+  const tabLabels: Record<ProjectKey, string> = { food: demo.tabFood, beauty: demo.tabBeauty };
 
   function onKeyDown(event: KeyboardEvent<HTMLDivElement>) {
     const rtl = getComputedStyle(event.currentTarget).direction === "rtl";
@@ -39,11 +42,11 @@ export function ProductDemo({ dict }: { dict: Dictionary }) {
   return (
     <section aria-labelledby="exemple-title" id="exemple" className="py-16 sm:py-24">
       <Container>
-        <SectionHeading id="exemple-title" eyebrow={dict.demo.eyebrow} title={dict.demo.title} lead={dict.demo.lead} />
+        <SectionHeading id="exemple-title" eyebrow={demo.eyebrow} title={demo.title} lead={demo.lead} />
         <div className="mt-10">
           <div
             role="tablist"
-            aria-label={dict.demo.tabsLabel}
+            aria-label={demo.tabsLabel}
             onKeyDown={onKeyDown}
             className="inline-flex rounded-full bg-surface-2 p-1 ring-1 ring-line"
           >
@@ -66,7 +69,7 @@ export function ProductDemo({ dict }: { dict: Dictionary }) {
                     selected ? "bg-surface text-accent shadow-sm ring-1 ring-line" : "text-muted hover:text-ink"
                   }`}
                 >
-                  {labels[key]}
+                  {tabLabels[key]}
                 </button>
               );
             })}
@@ -81,17 +84,17 @@ export function ProductDemo({ dict }: { dict: Dictionary }) {
               tabIndex={0}
               className={`accent-${key} mt-6 rounded-card`}
             >
-              <ProductCard product={dict.demo[key]} dict={dict} />
+              <ProductCard product={demo[key]} demo={demo} labels={verdictLabels} />
             </div>
           ))}
-          <p className="mt-4 text-sm text-muted">{dict.demo.fictional}</p>
+          <p className="mt-4 text-sm text-muted">{demo.fictional}</p>
         </div>
       </Container>
     </section>
   );
 }
 
-function ProductCard({ product, dict }: { product: DemoProduct; dict: Dictionary }) {
+function ProductCard({ product, demo, labels }: { product: DemoProduct; demo: DemoCopy; labels: Labels }) {
   const overall = overallVerdict(product.ingredients.map((i) => i.verdict));
   const flagged = product.ingredients.filter((i) => i.verdict !== "halal").length;
   const firstFlagged = product.ingredients.findIndex((i) => i.verdict !== "halal");
@@ -105,17 +108,17 @@ function ProductCard({ product, dict }: { product: DemoProduct; dict: Dictionary
         <h3 className="mt-1 text-2xl font-bold">{product.name}</h3>
         <p className="text-muted">{product.brand}</p>
         <div className="mt-6 rounded-2xl bg-surface p-4 ring-1 ring-line">
-          <p className="text-sm font-semibold">{dict.demo.overall}</p>
+          <p className="text-sm font-semibold">{demo.overall}</p>
           <p className="mt-2">
-            <VerdictBadge verdict={overall} label={dict.verdicts.labels[overall]} size="lg" />
+            <VerdictBadge verdict={overall} label={labels[overall]} size="lg" />
           </p>
-          <p className="mt-2 text-sm text-muted">{dict.demo.overallHint}</p>
+          <p className="mt-2 text-sm text-muted">{demo.overallHint}</p>
         </div>
       </header>
       <div className="p-4 sm:p-8">
         <div className="flex flex-wrap items-baseline justify-between gap-2 px-2 sm:px-0">
-          <h4 className="font-bold">{dict.demo.ingredients}</h4>
-          <p className="text-sm text-muted">{format(dict.demo.flagged, { n: flagged })}</p>
+          <h4 className="font-bold">{demo.ingredients}</h4>
+          <p className="text-sm text-muted">{format(demo.flagged, { n: flagged })}</p>
         </div>
         <ul className="mt-4 space-y-2">
           {product.ingredients.map((ing, i) => (
@@ -130,17 +133,17 @@ function ProductCard({ product, dict }: { product: DemoProduct; dict: Dictionary
                     </span>
                   )}
                   <span className="ms-auto">
-                    <VerdictBadge verdict={ing.verdict} label={dict.verdicts.labels[ing.verdict]} size="sm" />
+                    <VerdictBadge verdict={ing.verdict} label={labels[ing.verdict]} size="sm" />
                   </span>
                 </summary>
                 <dl className="grid gap-3 px-4 pb-4 text-sm sm:grid-cols-[8rem_1fr] sm:ps-11">
-                  <dt className="font-semibold">{dict.demo.origin}</dt>
+                  <dt className="font-semibold">{demo.origin}</dt>
                   <dd className="text-muted">{ing.origin}</dd>
-                  <dt className="font-semibold">{dict.demo.source}</dt>
+                  <dt className="font-semibold">{demo.source}</dt>
                   <dd className="text-muted">{ing.source}</dd>
                   {ing.schools && (
                     <>
-                      <dt className="font-semibold">{dict.demo.schools}</dt>
+                      <dt className="font-semibold">{demo.schools}</dt>
                       <dd className="text-muted">{ing.schools}</dd>
                     </>
                   )}

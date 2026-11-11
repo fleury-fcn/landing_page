@@ -1,0 +1,100 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { Icon, type IconName } from "@/components/ui/Icon";
+import { VerdictBadge } from "@/components/ui/VerdictBadge";
+import type { Locale } from "@/i18n/config";
+import { format } from "@/i18n/get-dictionary";
+import type { Dictionary } from "@/i18n/types";
+import { api, isAbortError, type ProductSummary } from "@/lib/api";
+import { fallbackStats, type StatsSnapshot } from "@/lib/fallback-stats";
+import { projectLinks } from "@/lib/site";
+import type { Verdict } from "@/lib/verdict";
+
+type Status = "loading" | "live" | "fallback";
+
+export function LiveStats({
+  copy,
+  labels,
+  locale,
+}: {
+  copy: Dictionary["stats"];
+  labels: Record<Verdict, string>;
+  locale: Locale;
+}) {
+  const [status, setStatus] = useState<Status>("loading");
+  const [stats, setStats] = useState<StatsSnapshot>(fallbackStats);
+  const [popular, setPopular] = useState<ProductSummary[]>([]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    api
+      .stats(controller.signal)
+      .then((s) => {
+        setStats({ products: s.products, ingredients: s.ingredients, contributors: s.contributors, updatedAt: s.updated_at });
+        setStatus("live");
+      })
+      .catch((err: unknown) => {
+        if (!isAbortError(err)) setStatus("fallback");
+      });
+    api
+      .popular(4, controller.signal)
+      .then(setPopular)
+      .catch(() => {
+        /* La liste est facultative : on ne l'affiche simplement pas. */
+      });
+    return () => controller.abort();
+  }, []);
+
+  const nf = new Intl.NumberFormat(locale);
+  const show = (n: number | null) => (n === null ? "—" : nf.format(n));
+  const items: { icon: IconName; label: string; value: number | null }[] = [
+    { icon: "box", label: copy.products, value: stats.products.total },
+    { icon: "flask", label: copy.ingredients, value: stats.ingredients },
+    { icon: "users", label: copy.contributors, value: stats.contributors },
+  ];
+  const updated = stats.updatedAt ? new Intl.DateTimeFormat(locale, { dateStyle: "long" }).format(new Date(stats.updatedAt)) : "";
+  const note = status === "loading" ? copy.loading : status === "live" ? format(copy.live, { date: updated }) : copy.fallback;
+
+  return (
+    <>
+      <dl className="mt-10 grid gap-4 sm:grid-cols-3" aria-busy={status === "loading"}>
+        {items.map((it) => (
+          <div key={it.label} className="reveal flex flex-col-reverse rounded-card bg-surface p-6 ring-1 ring-line">
+            <dt className="mt-1 text-muted">{it.label}</dt>
+            <dd className="flex items-center gap-3 text-4xl font-extrabold tabular-nums">
+              <Icon name={it.icon} className="size-7 shrink-0 text-food" />
+              <span className={status === "loading" ? "opacity-60 transition-opacity" : "transition-opacity"}>{show(it.value)}</span>
+            </dd>
+          </div>
+        ))}
+      </dl>
+      <p className="mt-4 flex items-center gap-2 text-sm text-muted" role="status">
+        {status === "live" && <span aria-hidden="true" className="size-2 rounded-full bg-halal" />}
+        {note}
+      </p>
+
+      {popular.length > 0 && (
+        <div className="mt-12">
+          <h3 className="text-xl font-bold">{copy.popularTitle}</h3>
+          <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {popular.map((p) => (
+              <li key={p.barcode} className={`accent-${p.project}`}>
+                <a
+                  href={projectLinks.product(p.project, p.barcode)}
+                  className="flex h-full flex-col gap-3 rounded-2xl bg-surface p-4 ring-1 ring-line transition-shadow hover:shadow-lg hover:shadow-ink/5"
+                >
+                  <span className="font-semibold">{p.name}</span>
+                  <span className="text-sm text-muted">{p.brand}</span>
+                  <span className="mt-auto">
+                    <VerdictBadge verdict={p.verdict} label={labels[p.verdict]} size="sm" />
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </>
+  );
+}

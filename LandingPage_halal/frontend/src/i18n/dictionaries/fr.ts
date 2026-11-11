@@ -43,6 +43,7 @@ export const fr: Dictionary = {
     error: "La recherche est momentanément indisponible. Réessayez dans un instant.",
     results: "{n} résultat(s) pour « {q} »",
     minChars: "Saisissez au moins 2 caractères.",
+    seeAll: "Voir tous les résultats",
   },
   projects: {
     eyebrow: "Deux projets jumeaux",
