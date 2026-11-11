@@ -1,12 +1,12 @@
+import { HalalSeal } from "@/components/brand/HalalSeal";
+import { ProjectLogo } from "@/components/brand/ProjectLogo";
 import { Phone } from "@/components/phone/Phone";
 import { ResultScreen } from "@/components/phone/screens";
 import { Container } from "@/components/ui/Container";
-import { Icon, type IconName } from "@/components/ui/Icon";
+import { Icon } from "@/components/ui/Icon";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import type { Dictionary } from "@/i18n/types";
-import { projectKeys, projectLinks, site, type ProjectKey } from "@/lib/site";
-
-const icons: Record<ProjectKey, IconName> = { food: "leaf", beauty: "sparkle" };
+import { projectKeys, projectLinks, site } from "@/lib/site";
 
 export function ProjectSelector({ dict }: { dict: Dictionary }) {
   const { screens, demo } = dict;
@@ -23,14 +23,14 @@ export function ProjectSelector({ dict }: { dict: Dictionary }) {
                 <article className="lift group relative flex h-full flex-col overflow-hidden rounded-card bg-surface p-6 ring-1 ring-line focus-within:ring-2 focus-within:ring-accent hover:shadow-2xl hover:shadow-brand-strong/10 sm:p-8 sm:pe-52 lg:pe-56">
                   <div aria-hidden="true" className="absolute inset-x-0 top-0 h-1.5 bg-accent" />
                   <div className="flex items-center gap-3">
-                    <span className="grid size-12 place-items-center rounded-2xl bg-accent-soft text-accent">
-                      <Icon name={icons[key]} className="size-6" />
-                    </span>
+                    <HalalSeal variant={key} className="size-14 drop-shadow-md transition-transform duration-500 group-hover:rotate-45" />
                     <span className="rounded-full bg-accent-soft px-3 py-1 text-sm font-semibold text-accent">{p.tag}</span>
                   </div>
-                  <h3 className="mt-5 text-2xl font-bold" dir="ltr">
-                    <span className="sr-only">{site.projects[key].name}: </span>
-                    {p.name}
+                  <h3 className="mt-5">
+                    <span className="sr-only">{p.name} ({site.projects[key].name})</span>
+                    <span aria-hidden="true">
+                      <ProjectLogo project={key} size="lg" seal={false} />
+                    </span>
                   </h3>
                   <p className="mt-3 text-muted">{p.description}</p>
                   <p className="mt-6 text-sm font-semibold">{p.watchlistLabel}</p>

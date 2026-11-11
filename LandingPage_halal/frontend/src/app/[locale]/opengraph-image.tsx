@@ -33,8 +33,14 @@ export default function OpengraphImage() {
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 20, fontSize: 40, fontWeight: 700 }}>
-          <div style={{ width: 64, height: 64, borderRadius: 18, background: "#ffffff", display: "flex" }} />
-          Halal Open Facts
+          <svg width="72" height="72" viewBox="0 0 48 48">
+            <path d="M8 8h32v32H8z" fill="#ffffff" />
+            <path d="M24 1.4 46.6 24 24 46.6 1.4 24z" fill="#ffffff" />
+            <circle cx="24" cy="24" r="15.5" fill="#07502d" />
+            <circle cx="24" cy="24" r="14" fill="none" stroke="#d9a92e" strokeWidth="1.4" />
+            <path d="m17.5 24.5 4.5 4.5 9-9.5" fill="none" stroke="#ffffff" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+          halalopenfoodfacts · halalopenbeautyfacts
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
           <div style={{ fontSize: 76, fontWeight: 800, lineHeight: 1.05, letterSpacing: -2 }}>Food & cosmetics,</div>

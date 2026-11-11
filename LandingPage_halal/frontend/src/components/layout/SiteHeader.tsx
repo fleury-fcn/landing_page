@@ -18,8 +18,13 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
     <header className="sticky top-0 z-40 border-b border-line/70 bg-bg/85 backdrop-blur-md supports-[not(backdrop-filter:blur(1px))]:bg-bg">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 px-4 sm:px-6 lg:px-8">
         <a href={`/${locale}/`} className="flex min-h-16 items-center gap-2.5 font-bold" aria-label={`${site.name}, accueil`}>
-          <Logo />
-          <span dir="ltr">{site.name}</span>
+          <Logo className="size-10 transition-transform duration-700 hover:rotate-45" />
+          <span className="flex flex-col leading-tight">
+            <span dir="ltr">{site.name}</span>
+            <span lang="ar" className="text-xs font-semibold text-brand">
+              حلال · Food &amp; Beauty
+            </span>
+          </span>
         </a>
         <div className="order-3 -mx-4 w-[calc(100%+2rem)] overflow-x-auto border-t border-line/70 px-4 lg:order-none lg:mx-0 lg:w-auto lg:flex-1 lg:border-0 lg:px-0">
           <nav aria-label={dict.a11y.mainNav}>

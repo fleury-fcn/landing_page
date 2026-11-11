@@ -1,4 +1,5 @@
 import type { CSSProperties, ReactNode } from "react";
+import { HalalSeal } from "@/components/brand/HalalSeal";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import { VerdictBadge } from "@/components/ui/VerdictBadge";
 import type { DemoIngredient, DemoProduct, Dictionary } from "@/i18n/types";
@@ -67,8 +68,9 @@ function ProductHead({ product, accent = "food" }: { product: DemoProduct; accen
 export function ScannerScreen({ s }: ScreenCopy) {
   return (
     <div className="flex h-full flex-col bg-[#06120b] text-white">
-      <p className="px-4 pt-1 text-[0.7rem] font-bold">{s.scanTitle}</p>
-      <div className="relative mx-4 mt-3 flex-1 overflow-hidden rounded-2xl bg-[radial-gradient(circle_at_50%_40%,#1d3b2b,#06120b_75%)]">
+      <AppBrand dark />
+      <p className="px-4 text-[0.7rem] font-bold">{s.scanTitle}</p>
+      <div className="relative mx-4 mt-2 flex-1 overflow-hidden rounded-2xl bg-[radial-gradient(circle_at_50%_40%,#1d3b2b,#06120b_75%)]">
         {/* coins du viseur */}
         {["top-3 left-3 border-t-2 border-l-2", "top-3 right-3 border-t-2 border-r-2", "bottom-3 left-3 border-b-2 border-l-2", "bottom-3 right-3 border-b-2 border-r-2"].map((c) => (
           <span key={c} className={`absolute size-6 rounded-sm border-brand-glow ${c}`} />
@@ -99,6 +101,7 @@ export function ResultScreen({ demo, labels, kind = "food" }: ScreenCopy & { kin
   const overall = overallVerdict(product.ingredients.map((i) => i.verdict));
   return (
     <div className="flex h-full flex-col">
+      <AppBrand kind={kind} />
       <AppBar title={product.category} />
       <ProductHead product={product} accent={kind} />
       <div className={`pop mx-4 mt-3 rounded-2xl p-3 ${panel[overall]}`} style={d(0)}>
@@ -135,6 +138,7 @@ export function DetailScreen({ s, demo, labels }: ScreenCopy) {
   ];
   return (
     <div className="flex h-full flex-col">
+      <AppBrand />
       <AppBar title={s.detailTitle} />
       <div className="px-4">
         <p className="text-sm font-extrabold">{ing.name}</p>
@@ -164,7 +168,8 @@ export function SearchScreen({ s, demo, labels }: ScreenCopy) {
   ];
   return (
     <div className="flex h-full flex-col">
-      <p className="px-4 pt-1 text-[0.7rem] font-bold">{s.searchTitle}</p>
+      <AppBrand />
+      <p className="px-4 text-[0.7rem] font-bold">{s.searchTitle}</p>
       <div className="mx-4 mt-2 flex items-center gap-2 rounded-full bg-surface px-3 py-2 ring-1 ring-brand">
         <Icon name="search" className="size-3 text-muted" />
         <span className="text-[0.65rem]">{s.searchQuery}</span>
@@ -204,6 +209,7 @@ export function SearchScreen({ s, demo, labels }: ScreenCopy) {
 export function AnalysisScreen({ s, demo }: ScreenCopy) {
   return (
     <div className="flex h-full flex-col">
+      <AppBrand />
       <AppBar title={s.analysing} icon="flask" />
       <div className="mx-4 mt-1 grid aspect-square place-items-center rounded-2xl bg-brand-soft">
         <div className="relative grid size-16 place-items-center rounded-full bg-surface shadow-lg">
@@ -234,7 +240,8 @@ export function HistoryScreen({ s, demo, labels }: ScreenCopy) {
   );
   return (
     <div className="flex h-full flex-col">
-      <p className="px-4 pt-1 text-[0.7rem] font-bold">{s.historyTitle}</p>
+      <AppBrand />
+      <p className="px-4 text-[0.7rem] font-bold">{s.historyTitle}</p>
       <p className="mt-2 px-4 text-[0.55rem] font-bold text-muted uppercase">{s.today}</p>
       <ul className="mt-1.5 space-y-1.5 px-4">
         {items.map((ing, i) => (
@@ -254,6 +261,7 @@ export function HistoryScreen({ s, demo, labels }: ScreenCopy) {
 export function ContributeScreen({ s }: ScreenCopy) {
   return (
     <div className="flex h-full flex-col">
+      <AppBrand />
       <AppBar title={s.contributeTitle} />
       <div className="relative mx-4 grid aspect-[4/3] place-items-center overflow-hidden rounded-2xl bg-surface-2 ring-1 ring-line">
         <div className="shimmer absolute inset-0" />
@@ -290,6 +298,26 @@ export function FloatingChip({ children, className = "", delay = 0 }: { children
       style={d(delay)}
     >
       {children}
+    </div>
+  );
+}
+
+/** Bandeau de marque dans l'app : sceau + nom du projet halal. */
+export function AppBrand({ kind = "food", dark = false }: { kind?: "food" | "beauty"; dark?: boolean }) {
+  return (
+    <div className={`flex items-center justify-between px-4 pb-1.5 ${dark ? "text-white" : ""}`}>
+      <span className="flex items-center gap-1.5" dir="ltr">
+        <HalalSeal variant={kind} className="size-5" />
+        <span className="text-[0.6rem] leading-none font-extrabold tracking-tight">
+          <span className={dark ? "text-[#7fe0a8]" : kind === "food" ? "text-brand" : "text-beauty"}>halal</span>
+          <span className="opacity-60">open</span>
+          {kind}
+          <span className="opacity-60">facts</span>
+        </span>
+      </span>
+      <span lang="ar" className={`text-[0.6rem] font-bold ${dark ? "text-[#7fe0a8]" : kind === "food" ? "text-brand" : "text-beauty"}`}>
+        حلال
+      </span>
     </div>
   );
 }

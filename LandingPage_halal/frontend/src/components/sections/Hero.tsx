@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import { ProjectLogo } from "@/components/brand/ProjectLogo";
 import { Phone } from "@/components/phone/Phone";
 import { DetailScreen, FloatingChip, ResultScreen, ScannerScreen, type ScreenCopy } from "@/components/phone/screens";
 import { ButtonLink } from "@/components/ui/ButtonLink";
@@ -6,7 +7,7 @@ import { Container } from "@/components/ui/Container";
 import { Icon } from "@/components/ui/Icon";
 import { VerdictBadge } from "@/components/ui/VerdictBadge";
 import type { Dictionary } from "@/i18n/types";
-import { projectLinks } from "@/lib/site";
+import { projectKeys, projectLinks } from "@/lib/site";
 import { HeroSearch } from "./HeroSearch";
 
 const d = (n: number) => ({ "--d": n }) as CSSProperties;
@@ -66,6 +67,25 @@ export function Hero({ dict }: { dict: Dictionary }) {
               </li>
             ))}
           </ul>
+
+          <div className="intro mt-8 border-t border-line pt-6" style={d(8)}>
+            <p className="text-xs font-semibold tracking-wide text-muted uppercase rtl:tracking-normal">{dict.projects.eyebrow}</p>
+            <ul className="mt-3 flex flex-wrap gap-3">
+              {projectKeys.map((key) => (
+                <li key={key}>
+                  <a
+                    href={projectLinks.home(key)}
+                    className="lift inline-flex min-h-12 items-center rounded-2xl bg-surface px-3 py-2 ring-1 ring-line hover:shadow-lg hover:shadow-brand-strong/10"
+                  >
+                    <span className="sr-only">{dict.projects[key].name}</span>
+                    <span aria-hidden="true">
+                      <ProjectLogo project={key} size="sm" />
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
 
         {/* Grappe de téléphones */}

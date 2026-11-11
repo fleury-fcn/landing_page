@@ -2,6 +2,7 @@ import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/types";
 import { communityLinks, projectLinks, site } from "@/lib/site";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { ProjectLogo } from "@/components/brand/ProjectLogo";
 import { Logo } from "./Logo";
 
 export function SiteFooter({ locale, dict }: { locale: Locale; dict: Dictionary }) {
@@ -43,6 +44,18 @@ export function SiteFooter({ locale, dict }: { locale: Locale; dict: Dictionary 
       <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="grid grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-[1.3fr_repeat(4,1fr)]">
           <div className="col-span-2 lg:col-span-1">
+            <ul className="mb-5 flex flex-col gap-2">
+              {(["food", "beauty"] as const).map((k) => (
+                <li key={k}>
+                  <a href={projectLinks.home(k)} className="inline-flex min-h-9 items-center">
+                    <span className="sr-only">{dict.projects[k].name}</span>
+                    <span aria-hidden="true">
+                      <ProjectLogo project={k} size="sm" />
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
             <p className="flex items-center gap-2.5 font-bold">
               <Logo />
               <span dir="ltr">{site.name}</span>
