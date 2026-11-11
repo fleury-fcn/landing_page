@@ -1,0 +1,11 @@
+[tool.ruff]
+line-length = 110
+target-version = "py312"
+extend-exclude = ["catalog/migrations"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "DJ", "S", "SIM", "RUF"]
+ignore = ["RUF012"]
+
+[tool.ruff.lint.per-file-ignores]
+"**/tests*.py" = ["S101", "S106"]
