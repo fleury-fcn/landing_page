@@ -26,3 +26,23 @@ export const site = {
 } as const;
 
 export type ProjectKey = keyof typeof site.projects;
+export const projectKeys: readonly ProjectKey[] = ["food", "beauty"];
+
+export function isProjectKey(value: unknown): value is ProjectKey {
+  return value === "food" || value === "beauty";
+}
+
+/** Routes des applications food/beauty (à aligner sur leurs routes réelles). */
+export const projectLinks = {
+  home: (p: ProjectKey) => `${site.projects[p].url}/`,
+  search: (p: ProjectKey, q = "") => `${site.projects[p].url}/search${q ? `?q=${encodeURIComponent(q)}` : ""}`,
+  scan: (p: ProjectKey) => `${site.projects[p].url}/scan`,
+  addProduct: (p: ProjectKey) => `${site.projects[p].url}/contribute`,
+  product: (p: ProjectKey, barcode: string) => `${site.projects[p].url}/product/${encodeURIComponent(barcode)}`,
+};
+
+export const communityLinks = {
+  github: site.githubUrl,
+  reportIssue: `${site.githubUrl}/issues/new`,
+  api: `${site.apiUrl}/`,
+};
