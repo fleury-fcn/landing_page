@@ -1,1 +1,161 @@
 @import "tailwindcss";
+
+/* ───────────── Design tokens ─────────────
+   Les accents Food / Beauty sont volontairement hors des teintes de verdict
+   (vert / ambre / rouge / gris) pour ne jamais être confondus avec un statut.
+   Tous les couples texte/fond respectent WCAG AA (≥ 4,5:1). */
+:root {
+  color-scheme: light;
+  --bg: #fbfaf6;
+  --surface: #ffffff;
+  --surface-2: #f2f0e8;
+  --ink: #17201b;
+  --muted: #4d5751;
+  --line: #e2dfd4;
+  --food: #0b6a80;
+  --food-soft: #e3f2f5;
+  --beauty: #8a2f6c;
+  --beauty-soft: #f7e8f1;
+  --accent: var(--ink);
+  --accent-soft: var(--surface-2);
+
+  --halal: #166534;
+  --halal-bg: #dcfce7;
+  --doubtful: #8a3b0c;
+  --doubtful-bg: #fef3c7;
+  --haram: #9f1c1c;
+  --haram-bg: #fee2e2;
+  --unknown: #374151;
+  --unknown-bg: #e5e7eb;
+
+  --focus: #0b6a80;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+    --bg: #0e1311;
+    --surface: #161d1a;
+    --surface-2: #1d2622;
+    --ink: #eef2ef;
+    --muted: #a7b2ac;
+    --line: #2b3530;
+    --food: #5fc6dd;
+    --food-soft: #12292f;
+    --beauty: #ec9fd2;
+    --beauty-soft: #2e1a27;
+
+    --halal: #86efac;
+    --halal-bg: #10301d;
+    --doubtful: #fcd34d;
+    --doubtful-bg: #3a2a0a;
+    --haram: #fca5a5;
+    --haram-bg: #3d1515;
+    --unknown: #d1d5db;
+    --unknown-bg: #2a2f36;
+
+    --focus: #5fc6dd;
+  }
+}
+
+.accent-food {
+  --accent: var(--food);
+  --accent-soft: var(--food-soft);
+}
+.accent-beauty {
+  --accent: var(--beauty);
+  --accent-soft: var(--beauty-soft);
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-food: var(--food);
+  --color-food-soft: var(--food-soft);
+  --color-beauty: var(--beauty);
+  --color-beauty-soft: var(--beauty-soft);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-halal: var(--halal);
+  --color-halal-bg: var(--halal-bg);
+  --color-doubtful: var(--doubtful);
+  --color-doubtful-bg: var(--doubtful-bg);
+  --color-haram: var(--haram);
+  --color-haram-bg: var(--haram-bg);
+  --color-unknown: var(--unknown);
+  --color-unknown-bg: var(--unknown-bg);
+
+  --font-sans: var(--font-jakarta), var(--font-arabic), ui-sans-serif, system-ui, sans-serif;
+  --radius-card: 1.25rem;
+}
+
+/* ───────────── Base ───────────── */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+}
+:where(h1, h2, h3) {
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+[dir="rtl"] :where(h1, h2, h3) {
+  letter-spacing: 0;
+  line-height: 1.35;
+}
+p {
+  text-wrap: pretty;
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* ───────────── Scroll reveal (0 JS) ─────────────
+   Amélioration progressive : uniquement si le navigateur supporte les
+   scroll-driven animations ET que l'utilisateur n'a pas réduit les animations. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .reveal {
+      animation: reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 35%;
+    }
+  }
+}
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(1.25rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

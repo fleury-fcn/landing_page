@@ -1,7 +1,22 @@
 import type { ReactNode } from "react";
 import { notFound } from "next/navigation";
 import { isLocale, localeMeta, locales } from "@/i18n/config";
+import { Noto_Sans_Arabic, Plus_Jakarta_Sans } from "next/font/google";
 import "../globals.css";
+
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ["latin", "latin-ext"],
+  display: "swap",
+  variable: "--font-jakarta",
+});
+
+/** Chargée uniquement si des glyphes arabes sont présents (unicode-range). */
+const arabic = Noto_Sans_Arabic({
+  subsets: ["arabic"],
+  display: "swap",
+  variable: "--font-arabic",
+  preload: false,
+});
 
 export const dynamicParams = false;
 
@@ -19,8 +34,8 @@ export default async function LocaleLayout({
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
   return (
-    <html lang={locale} dir={localeMeta[locale].dir}>
-      <body>{children}</body>
+    <html lang={locale} dir={localeMeta[locale].dir} className={`${jakarta.variable} ${arabic.variable}`}>
+      <body className="min-h-dvh antialiased">{children}</body>
     </html>
   );
 }
