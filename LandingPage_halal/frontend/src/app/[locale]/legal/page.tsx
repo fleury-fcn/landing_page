@@ -4,7 +4,16 @@ import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SkipLink } from "@/components/layout/SkipLink";
 import { Container } from "@/components/ui/Container";
 import { isLocale } from "@/i18n/config";
+import type { Metadata } from "next";
 import { getDictionary } from "@/i18n/get-dictionary";
+import { buildMetadata } from "@/lib/seo";
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isLocale(locale)) return {};
+  const dict = getDictionary(locale);
+  return { ...buildMetadata(locale, dict, "legal/"), title: `${dict.legalPage.title} · Halal Open Facts`, robots: { index: false } };
+}
 
 export default async function LegalPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;

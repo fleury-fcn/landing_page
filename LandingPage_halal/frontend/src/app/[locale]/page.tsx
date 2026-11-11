@@ -13,6 +13,7 @@ import { Stats } from "@/components/sections/Stats";
 import { VerdictSystem } from "@/components/sections/VerdictSystem";
 import { isLocale } from "@/i18n/config";
 import { getDictionary } from "@/i18n/get-dictionary";
+import { buildJsonLd, jsonLdScript } from "@/lib/seo";
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -20,6 +21,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   const dict = getDictionary(locale);
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdScript(buildJsonLd(locale, dict)) }} />
       <SkipLink label={dict.a11y.skipToContent} />
       <SiteHeader locale={locale} dict={dict} />
       <main id="contenu" tabIndex={-1} className="outline-none">

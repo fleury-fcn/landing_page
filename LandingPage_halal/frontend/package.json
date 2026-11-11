@@ -11,7 +11,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "check": "npm run lint && npm run typecheck && npm run test",
-    "snapshot:stats": "node scripts/snapshot-stats.mjs"
+    "snapshot:stats": "node scripts/snapshot-stats.mjs",
+    "prebuild": "node scripts/snapshot-stats.mjs"
   },
   "dependencies": {
     "next": "15.5.29",
@@ -35,5 +36,11 @@
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^5.1.0"
-  }
+  },
+  "browserslist": [
+    "chrome >= 111",
+    "edge >= 111",
+    "firefox >= 111",
+    "safari >= 16.4"
+  ]
 }

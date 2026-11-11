@@ -1,7 +1,10 @@
+import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { notFound } from "next/navigation";
-import { isLocale, localeMeta, locales } from "@/i18n/config";
 import { Noto_Sans_Arabic, Plus_Jakarta_Sans } from "next/font/google";
+import { isLocale, localeMeta, locales } from "@/i18n/config";
+import { getDictionary } from "@/i18n/get-dictionary";
+import { buildMetadata } from "@/lib/seo";
 import "../globals.css";
 
 const jakarta = Plus_Jakarta_Sans({
@@ -22,6 +25,20 @@ export const dynamicParams = false;
 
 export function generateStaticParams(): { locale: string }[] {
   return locales.map((locale) => ({ locale }));
+}
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#fbfaf6" },
+    { media: "(prefers-color-scheme: dark)", color: "#0e1311" },
+  ],
+  colorScheme: "light dark",
+};
+
+export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isLocale(locale)) return {};
+  return buildMetadata(locale, getDictionary(locale));
 }
 
 export default async function LocaleLayout({

@@ -6,12 +6,12 @@ import { Logo } from "./Logo";
 
 export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   const links = [
-    { href: "#fonctionnement", label: dict.nav.how },
-    { href: "#verdicts", label: dict.nav.verdicts },
-    { href: "#exemple", label: dict.nav.demo },
-    { href: "#open-data", label: dict.nav.openData },
-    { href: "#contribuer", label: dict.nav.contribute },
-    { href: "#faq", label: dict.nav.faq },
+    { href: `/${locale}/#fonctionnement`, label: dict.nav.how },
+    { href: `/${locale}/#verdicts`, label: dict.nav.verdicts },
+    { href: `/${locale}/#exemple`, label: dict.nav.demo },
+    { href: `/${locale}/#open-data`, label: dict.nav.openData },
+    { href: `/${locale}/#contribuer`, label: dict.nav.contribute },
+    { href: `/${locale}/#faq`, label: dict.nav.faq },
   ];
   return (
     <header className="sticky top-0 z-40 border-b border-line/70 bg-bg/85 backdrop-blur-md supports-[not(backdrop-filter:blur(1px))]:bg-bg">
