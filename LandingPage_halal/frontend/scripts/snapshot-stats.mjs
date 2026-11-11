@@ -2,7 +2,13 @@
 // Si l'API est injoignable, le fichier existant est conservé : le build ne casse jamais.
 import { writeFile } from "node:fs/promises";
 
-const api = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api").replace(/\/$/, "");
+// Ne tourne que si l'API est explicitement configurée (CI / build de prod),
+// pour ne jamais figer des données de démo locales dans le dépôt.
+if (!process.env.NEXT_PUBLIC_API_URL) {
+  console.log("[snapshot:stats] NEXT_PUBLIC_API_URL non défini : instantané inchangé.");
+  process.exit(0);
+}
+const api = process.env.NEXT_PUBLIC_API_URL.replace(/\/$/, "");
 const target = new URL("../src/lib/stats-snapshot.json", import.meta.url);
 
 try {

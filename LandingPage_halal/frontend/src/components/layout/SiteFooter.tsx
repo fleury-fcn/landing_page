@@ -41,8 +41,8 @@ export function SiteFooter({ locale, dict }: { locale: Locale; dict: Dictionary 
   return (
     <footer className="border-t border-line bg-surface">
       <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 lg:px-8">
-        <div className="grid gap-10 lg:grid-cols-[1.3fr_repeat(4,1fr)]">
-          <div>
+        <div className="grid grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-[1.3fr_repeat(4,1fr)]">
+          <div className="col-span-2 lg:col-span-1">
             <p className="flex items-center gap-2.5 font-bold">
               <Logo />
               <span dir="ltr">{site.name}</span>
