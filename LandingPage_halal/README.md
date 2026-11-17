@@ -71,6 +71,8 @@ CORS : seules les origines listées dans `CORS_ALLOWED_ORIGINS` sont autorisées
 
 ## Déploiement (points d'attention)
 
+Procédure complète OVHcloud (SFTP, DNS, HTTPS, `npm run deploy`) : voir [DEPLOYMENT.md](DEPLOYMENT.md).
+
 - Servir `frontend/out/` avec n'importe quel serveur statique ou CDN.
 - En-têtes recommandés :
   - `/_next/static/*` → `Cache-Control: public, max-age=31536000, immutable`
